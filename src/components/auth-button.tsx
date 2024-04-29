@@ -2,7 +2,13 @@
 
 import React from "react";
 
-export default function AuthButton({ authUrl }: { authUrl: string }) {
+export default function AuthButton({
+  authUrl,
+  handleAuthSuccess,
+}: {
+  authUrl: string;
+  handleAuthSuccess: (uuid: string) => void;
+}) {
   const handleAuthWindowClose = () => {};
 
   const handleLoginClick = () => {
@@ -18,7 +24,7 @@ export default function AuthButton({ authUrl }: { authUrl: string }) {
   React.useEffect(() => {
     const handleMessage = (event: any) => {
       if (event.data.type === "AUTH_SUCCESS") {
-        console.log("Authentication success", event.data.uuid);
+        handleAuthSuccess(event.data.uuid);
       }
     };
 
