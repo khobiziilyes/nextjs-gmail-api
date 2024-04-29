@@ -1,13 +1,14 @@
-import type { NextRequest } from "next/server";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { redirect } from "next/navigation";
 
 import { oauth2Client } from "@/lib/oauth2Client";
 import sql from "@/utils/supabase/db";
 
-export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const code = searchParams.get("code");
-
+export default async function GET(
+  request: NextApiRequest,
+  response: NextApiResponse,
+) {
+  const { code } = request.query as { code: string };
   if (!code) return Response.redirect("/");
 
   const { tokens } = await oauth2Client.getToken({ code });
@@ -40,5 +41,5 @@ export async function GET(request: NextRequest) {
 
   const { uuid } = result[0];
 
-  redirect("/auth-success?uuid=" + uuid);
+  return response.redirect(307, "/auth-success?uuid=" + uuid);
 }

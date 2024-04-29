@@ -4,10 +4,10 @@ import React from "react";
 import { useSearchParams } from "next/navigation";
 
 export default function AuthSuccess() {
-  const params = useSearchParams();
-  const uuid = params.get("uuid");
+  const searchParams = useSearchParams();
+  const uuid = searchParams?.get("uuid");
 
-  console.log(params);
+  console.log(uuid);
 
   React.useEffect(() => {
     // TODO: Should be handled.

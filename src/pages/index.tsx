@@ -2,11 +2,20 @@ import React from "react";
 import { generateAuthUrl } from "@/lib/generateAuthUrl";
 import Image from "next/image";
 
-import AuthButton from "./auth-button";
+import AuthButton from "@/components/auth-button";
 
-export default function Home() {
+import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
+
+type AuthUrl = string;
+
+export const getServerSideProps = (async () => {
   const authUrl = generateAuthUrl();
+  return { props: { authUrl } };
+}) satisfies GetServerSideProps<{ authUrl: AuthUrl }>;
 
+export default function Home({
+  authUrl,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 w-full max-w-5xl items-center justify-end font-mono text-sm lg:flex">
