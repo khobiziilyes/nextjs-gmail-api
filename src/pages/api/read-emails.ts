@@ -1,18 +1,20 @@
-import type { NextRequest } from "next/server";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 import sql from "@/utils/supabase/db";
 
-import { oauth2Client } from "@/lib/oauth2Client";
 import { getThreadsList } from "@/lib/getThreadsList";
 
 const userNotFoundResponse = new Response(`User not found.`, {
   status: 400,
 });
 
-export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
-  const uuid = searchParams.get("uuid");
+type ResponseData = Awaited<ReturnType<typeof getThreadsList>>;
 
+export default async function GET(
+  request: NextApiRequest,
+  response: NextApiResponse<ResponseData>,
+) {
+  const { uuid } = request.query as { uuid: string };
   if (!uuid) return userNotFoundResponse;
 
   const [row] = (await sql`
@@ -23,5 +25,5 @@ export async function GET(request: NextRequest) {
 
   const threads = await getThreadsList(row);
 
-  return Response.json(threads);
+  return response.json(threads);
 }
