@@ -21,4 +21,8 @@ export default sql;
    token_type text,
    scope text
  );
+
+  -- Create the primary key
+
+  ALTER TABLE users ADD PRIMARY KEY (uuid);
 */
